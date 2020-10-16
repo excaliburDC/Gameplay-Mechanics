@@ -22,6 +22,7 @@ public class ProjectileWithTrajectoryPath : MonoBehaviour
     public int lineSegment = 10;
 
     private float smoothTurnAngle;
+    private float T;
 
 
     // Start is called before the first frame update
@@ -94,8 +95,10 @@ public class ProjectileWithTrajectoryPath : MonoBehaviour
         Vector3 Vxz = v;
         Vxz.y = 0f;
 
-        Vector3 result = shootPoint.position + v * time;
-        float sY = (-0.5f * Mathf.Abs(Physics.gravity.y) * (time * time)) + (v.y * time) + shootPoint.position.y;
+        Vector3 result = shootPoint.position + Vxz * time;
+
+        float sY = (-0.5f * Physics.gravity.magnitude * (time * time)) + (v.y * time) + shootPoint.position.y;
+      
 
         result.y = sY;
 
@@ -124,6 +127,8 @@ public class ProjectileWithTrajectoryPath : MonoBehaviour
 
         //rearranged the range formula { R = u * u * sin(2 * angle) / g}, to find the velocity during launch
         float velocity = Mathf.Sqrt(dist * gravity / Mathf.Sin(2 * radianAngle));
+
+        T = 2 * Mathf.Sin(radianAngle) / gravity;
 
 
         return velocity * dir.normalized; // Return a normalized vector.
