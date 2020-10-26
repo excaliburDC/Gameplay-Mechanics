@@ -17,7 +17,7 @@ public class CannonProjectile : MonoBehaviour
 
     [Space]
     [Header("Physics/normal variables")]
-    //public float velocity;
+    public float speed;
     [Range(0f, 360f)]
     public float launchAngle;
     public int lineSegment = 10;
@@ -62,7 +62,7 @@ public class CannonProjectile : MonoBehaviour
            // DrawTrajectorypath(cannonVel);
 
 
-            cannonHead.rotation = Quaternion.LookRotation(cannonVel);
+            cannonHead.rotation = Quaternion.LookRotation(projectileHitPoint.transform.position);
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -70,7 +70,9 @@ public class CannonProjectile : MonoBehaviour
 
                 rbObj.useGravity = true;
 
-                rbObj.velocity = cannonVel;
+                //rbObj.velocity = cannonVel;
+
+                rbObj.AddForce(cannonVel, ForceMode.VelocityChange);
             }
         }
     }
@@ -78,26 +80,36 @@ public class CannonProjectile : MonoBehaviour
     private Vector3 CalculateBallTrajectory(Vector3 origin, Vector3 targetPos)
     {
         Vector3 distance = targetPos - origin;
-        Vector3 distanceXZ = distance;
-        distanceXZ.y = 0f;
 
-      
-        
-        float sY = distance.y;
-        float sXZ = distanceXZ.magnitude;
+        // Set up the terms we need to solve the quadratic equations.
+        float gSquared = Physics.gravity.sqrMagnitude;
+        float b = speed * speed + Vector3.Dot(distance, Physics.gravity);
+        float discriminant = b * b - gSquared * distance.sqrMagnitude;
 
-        float velocity = Mathf.Sqrt((sXZ * sXZ * gravity) / (sXZ * Mathf.Sin(2 * radianAngle)) - 2 * sY * Mathf.Cos(radianAngle) * Mathf.Cos(radianAngle));
+        // Check whether the target is reachable at max speed or less.
+        if (discriminant < 0)
+        {
+            // Target is too far away to hit at this speed.
+            // Abort, or fire at max speed in its general direction?
+        }
 
-        float xzVelocity = velocity * Mathf.Cos(radianAngle);
-        float yVelocity = velocity * Mathf.Sin(radianAngle) - gravity * 1f;
+        float discRoot = Mathf.Sqrt(discriminant);
 
-        Vector3 result = distanceXZ.normalized;
-        result *= xzVelocity ;
-        result.y = yVelocity;
+        // Highest shot with the given max speed:
+        float T_max = Mathf.Sqrt((b + discRoot) * 2f / gSquared);
 
-        return result;
+        // Most direct shot with the given max speed:
+        float T_min = Mathf.Sqrt((b - discRoot) * 2f / gSquared);
 
-      //  return velocity * distanceXZ.normalized;
+        // Lowest-speed arc available:
+        float T_lowEnergy = Mathf.Sqrt(Mathf.Sqrt(distance.sqrMagnitude * 4f / gSquared));
+
+        float T = T_min; // choose T_max, T_min, or some T in-between like T_lowEnergy
+
+        // Convert from time-to-hit to a launch velocity:
+        Vector3 velocity = distance / T - Physics.gravity * T / 2f;
+
+        return velocity;
     }
 
     private void DrawTrajectorypath(Vector3 cannonVel)

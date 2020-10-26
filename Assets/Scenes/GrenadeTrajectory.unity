@@ -377,6 +377,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   line: {fileID: 0}
+  speed: 10
   launchAngle: 45
   lineSegment: 30
 --- !u!1 &705507993
@@ -511,7 +512,7 @@ MonoBehaviour:
     m_Bits: 512
   line: {fileID: 0}
   launchAngle: 45
-  lineSegment: 30
+  lineSegment: 50
 --- !u!4 &917096190
 Transform:
   m_ObjectHideFlags: 0
@@ -545,7 +546,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 184947247fd780d48a33426b604799a7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -571,7 +572,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.2
+    widthMultiplier: 1
     widthCurve:
       serializedVersion: 2
       m_Curve:
