@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace s3
 {
@@ -26,7 +27,7 @@ namespace s3
 
         void GoToMenuScene()
         {
-            Application.LoadLevel(0);
+            SceneManager.LoadScene(0);
         }
     }
 }

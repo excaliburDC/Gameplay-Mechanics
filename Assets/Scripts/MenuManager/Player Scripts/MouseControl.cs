@@ -63,7 +63,7 @@ public class MouseControl : MonoBehaviour
         //X and Y are inverted in Unity world space
         // X gives vertical values and Y gives Horizontal Values bro..
                         //new vector2(float X, float Y)
-        mouse_look = new Vector2(Input.GetAxis(MouseAxis.MOUSE_Y), Input.GetAxis(MouseAxis.MOUSE_X));
+       // mouse_look = new Vector2(Input.GetAxis(MouseAxis.MOUSE_Y), Input.GetAxis(MouseAxis.MOUSE_X));
 
         look_at.x += mouse_look.x * sensitivity * (invert ? 1f:-1f);
         look_at.y += mouse_look.y * sensitivity;

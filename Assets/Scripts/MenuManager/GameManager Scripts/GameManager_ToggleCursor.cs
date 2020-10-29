@@ -13,13 +13,13 @@ namespace s3
         {
             SetInitialReference();
             gameManager_Master.MenuToggleEvent += ToggleCursorState;
-            gameManager_Master.InvertoryUIToggleEvent += ToggleCursorState;
+            gameManager_Master.InventoryUIToggleEvent += ToggleCursorState;
         }
 
         void OnDisable()
         {
             gameManager_Master.MenuToggleEvent -= ToggleCursorState;
-            gameManager_Master.InvertoryUIToggleEvent -= ToggleCursorState;
+            gameManager_Master.InventoryUIToggleEvent -= ToggleCursorState;
         }
 
         // Update is called once per frame

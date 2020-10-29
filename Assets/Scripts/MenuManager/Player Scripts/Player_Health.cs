@@ -8,7 +8,7 @@ namespace s3
     public class Player_Health : MonoBehaviour
     {
         private GameManager_Master gameManager_Master;
-        private PlayerMaster playerMaster;
+        //private PlayerMaster playerMaster;
         public int playerHealth;
         public Text healthText;
 
@@ -16,14 +16,14 @@ namespace s3
         {
             SetInitialReferences();
             SetUI();
-            playerMaster.EventPlayerHealthDeduction += DeductHealth;
-            playerMaster.EventPlayerHealthIncrease += IncreasedHealth;
+           // playerMaster.EventPlayerHealthDeduction += DeductHealth;
+           // playerMaster.EventPlayerHealthIncrease += IncreasedHealth;
         }
 
         void OnDisable()
         {
-            playerMaster.EventPlayerHealthDeduction -= DeductHealth;
-            playerMaster.EventPlayerHealthIncrease -= IncreasedHealth;
+          //  playerMaster.EventPlayerHealthDeduction -= DeductHealth;
+          //  playerMaster.EventPlayerHealthIncrease -= IncreasedHealth;
         }
         // Start is called before the first frame update
         void Start()
@@ -34,8 +34,8 @@ namespace s3
         
         void SetInitialReferences()
         {
-            gameManager_Master = GameObject.Find("GameManger").GetComponent<GameManager_Master>();
-            playerMaster = GetComponent<PlayerMaster>();
+            gameManager_Master = GameObject.Find("GameManager").GetComponent<GameManager_Master>();
+            //playerMaster = GetComponent<PlayerMaster>();
 
         }
 

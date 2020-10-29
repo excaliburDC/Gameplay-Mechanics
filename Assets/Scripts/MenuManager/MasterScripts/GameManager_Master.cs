@@ -1,16 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 namespace s3
 {
     public class GameManager_Master : MonoBehaviour
     {
-
+        
         public delegate void GameManagerEventHandler();
 
         public event GameManagerEventHandler MenuToggleEvent;
-        public event GameManagerEventHandler InvertoryUIToggleEvent;
+        public event GameManagerEventHandler InventoryUIToggleEvent;
         public event GameManagerEventHandler RestartLevelEvent;
         public event GameManagerEventHandler GoToMenuSceneEvent;
         public event GameManagerEventHandler GameOverEvent;
@@ -30,9 +29,9 @@ namespace s3
 
         public void CallEventInventoryUIToggle()
         {
-            if (InvertoryUIToggleEvent != null)
+            if (InventoryUIToggleEvent != null)
             {
-                InvertoryUIToggleEvent();
+                InventoryUIToggleEvent();
             }
         }
 

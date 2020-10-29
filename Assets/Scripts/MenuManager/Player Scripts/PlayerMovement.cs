@@ -68,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //X-left,right || Y-up and down || Z-forward and backward
         //actual function is Input.GetAxis("funcName");
-        move_direction = new Vector3(Input.GetAxis(Axis.HORIZONTAL), 0, Input.GetAxis(Axis.VERTICAL));
+        move_direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
         move_direction = transform.TransformDirection(move_direction);//local transform to WorldSpace if any child object altered...
                                                                       //best if we do this....
