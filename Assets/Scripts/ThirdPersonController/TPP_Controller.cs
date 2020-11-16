@@ -4,15 +4,29 @@ using UnityEngine;
 
 namespace TPP
 {
+    public enum MovementDir
+    {
+        IDLE,
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT
+    }
+
+
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(CapsuleCollider))]
     [RequireComponent(typeof(Animator))]
     public class TPP_Controller : MonoBehaviour
     {
+        [SerializeField] private MovementDir dir;
         [SerializeField] private float moveSpeed =2.0f;
         [SerializeField] private float turnSpeed = 0.2f;
         [SerializeField] private float groundDist = 0.2f;
+        [SerializeField] private float acceleration = 2.0f;
+        [SerializeField] private float deceleration = 2.0f;
         [SerializeField] private LayerMask groundMask;
+        
 
 
         private IInput input;
@@ -28,6 +42,11 @@ namespace TPP
 
         private float desiredRotationAngle = 0f;
         private float m_CapsuleHeight;
+        private float velocityX = 0.0f;
+        private float velocityZ = 0.0f;
+
+        private int velocityXHash;
+        private int velocityZHash;
 
 
         private void Awake()
@@ -44,10 +63,16 @@ namespace TPP
         // Start is called before the first frame update
         private void OnEnable()
         {
+            velocityXHash = Animator.StringToHash("VelocityX");
+            velocityZHash = Animator.StringToHash("VelocityZ");
 
             input.OnMovementInput += HandleMovement;
             input.OnMovementDirectionInput += HandleMovementDirection;
+
+
         }
+
+    
 
         // Update is called once per frame
         void Update()
@@ -68,15 +93,23 @@ namespace TPP
             rb.MovePosition(rb.position + moveVector.normalized * Time.fixedDeltaTime);
         }
 
-        private void HandleMovement(Vector2 input)
+        private void HandleMovement(float h, float v)
         {
             
             if(IsGrounded())
             {
                 Debug.LogError("Grounded");
-                if (input.y>0)
+
+                
+
+                if (h != 0) 
                 {
-                    moveVector = transform.forward * moveSpeed;
+                    moveVector = h * transform.right * moveSpeed;
+                }
+
+                else if (v != 0)
+                {
+                    moveVector = v * transform.forward * moveSpeed;
                 }
 
                 else
@@ -112,6 +145,11 @@ namespace TPP
             }
         }
 
+        private void HandleAnimations()
+        {
+
+        }
+
         private bool IsGrounded()
         {
            
@@ -119,6 +157,8 @@ namespace TPP
 
 
         }
+
+        
 
         private void OnDisable()
         {

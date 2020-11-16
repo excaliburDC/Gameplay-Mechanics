@@ -7,10 +7,13 @@ namespace TPP
 {
     public class PlayerInput : MonoBehaviour, IInput
     {
-        public Action<Vector2> OnMovementInput { get; set; }
+        public Action<float,float> OnMovementInput { get; set; }
         public Action<Vector3> OnMovementDirectionInput { get; set; }
 
         private Camera cam;
+
+        private float horizontal;
+        private float vertical;
 
 
         // Start is called before the first frame update
@@ -40,8 +43,12 @@ namespace TPP
 
         private void GetMovementInput()
         {
-            Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            OnMovementInput?.Invoke(input);
+            // Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
+            horizontal = Input.GetAxis("Horizontal");
+            vertical = Input.GetAxis("Vertical");
+
+            OnMovementInput?.Invoke(horizontal,vertical);
         }
     }
 }
