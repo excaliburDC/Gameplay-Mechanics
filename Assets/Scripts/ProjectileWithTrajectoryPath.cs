@@ -24,6 +24,8 @@ public class ProjectileWithTrajectoryPath : MonoBehaviour
     private float smoothTurnAngle;
     private float T;
 
+    Vector3 calcVel;
+
 
     // Start is called before the first frame update
     void Awake()
@@ -58,6 +60,8 @@ public class ProjectileWithTrajectoryPath : MonoBehaviour
 
             Vector3 cannonVel = CalculateBallTrajectory(shootPoint.position,hit.point);
 
+            calcVel = cannonVel;
+
             DrawTrajectorypath(cannonVel);
 
             //float targetAngle = Mathf.Atan2(hit.normal.x, hit.normal.z) * Mathf.Deg2Rad + cam.transform.eulerAngles.y;
@@ -83,10 +87,19 @@ public class ProjectileWithTrajectoryPath : MonoBehaviour
 
     void DrawTrajectorypath(Vector3 cannonVelocity)
     {
+        float t;
+        t = (-1f * calcVel.y) / Physics.gravity.y;
+        t = 2f * t;
+
+        Vector3 trajectoryPoint;
+
         for (int i = 0; i < lineSegment; i++)
         {
-            Vector3 linePos = CalculateRenderPath(cannonVelocity, i / (float)lineSegment);
-            line.SetPosition(i,linePos);
+            float time = t * i / (float)(lineSegment);
+            trajectoryPoint = shootPoint.position + calcVel * time + 0.5f * Physics.gravity * time * time;
+
+            //Vector3 linePos = CalculateRenderPath(cannonVelocity, i / (float)lineSegment);
+            line.SetPosition(i,trajectoryPoint);
         }
     }
 

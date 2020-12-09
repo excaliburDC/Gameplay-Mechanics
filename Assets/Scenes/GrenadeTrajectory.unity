@@ -512,7 +512,7 @@ MonoBehaviour:
     m_Bits: 512
   line: {fileID: 0}
   launchAngle: 45
-  lineSegment: 50
+  lineSegment: 100
 --- !u!4 &917096190
 Transform:
   m_ObjectHideFlags: 0

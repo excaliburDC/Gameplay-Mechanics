@@ -26,8 +26,9 @@ namespace TPP
         [SerializeField] private float acceleration = 2.0f;
         [SerializeField] private float deceleration = 2.0f;
         [SerializeField] private LayerMask groundMask;
-        
 
+
+        private float turnSmoothRef;
 
         private IInput input;
         private Rigidbody rb;
@@ -98,25 +99,31 @@ namespace TPP
             
             if(IsGrounded())
             {
-                Debug.LogError("Grounded");
+                //Debug.LogError("Grounded");
 
                 
 
                 if (h != 0) 
                 {
                     moveVector = h * transform.right * moveSpeed;
+                    dir = (h > 0) ? MovementDir.RIGHT : MovementDir.LEFT;
                 }
 
                 else if (v != 0)
                 {
                     moveVector = v * transform.forward * moveSpeed;
+
+                    dir = (v > 0) ? MovementDir.UP : MovementDir.DOWN;
                 }
 
                 else
                 {
                     moveVector = Vector3.zero;
+
+                    dir = MovementDir.IDLE;
                 }
-             
+                
+
                 
                 
             }
@@ -124,25 +131,71 @@ namespace TPP
 
         private void HandleMovementDirection(Vector3 direction)
         {
-            desiredRotationAngle = Vector3.Angle(transform.forward, direction);
-            var crossProduct = Vector3.Cross(transform.forward, direction).y;
+            Vector3 turnDirection = CheckTurnDirection();
 
-            if(crossProduct<0)
+            desiredRotationAngle = Vector3.Angle(turnDirection, direction);
+            Debug.Log("Rotation Angle: "+desiredRotationAngle);
+            var crossProduct = Vector3.Cross(transform.forward, direction).y;
+            Debug.Log("Cross Product:" + crossProduct);
+
+            if (crossProduct < 0)
             {
                 desiredRotationAngle *= -1;
             }
 
+            //if(direction.magnitude>0f)
+            //{
+            //    float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Deg2Rad;
+
+            //    desiredRotationAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothRef, turnSpeed);
+            //}
+
+        }
+
+        private Vector3 CheckTurnDirection()
+        {
+            Vector3 turnDir = Vector3.zero;
+            switch(dir)
+            {
+                case MovementDir.UP:
+                    turnDir = transform.forward;
+                    break;
+
+                case MovementDir.DOWN:
+                    turnDir = -transform.forward;
+                    break;
+
+                case MovementDir.RIGHT:
+                    turnDir = transform.right;
+                    break;
+
+                case MovementDir.LEFT:
+                    turnDir = -transform.right;
+                    break;
+
+            }
+
+            return turnDir;
+
+            
         }
 
         void RotatePlayer()
         {
-            if(desiredRotationAngle > 10 || desiredRotationAngle < -10) 
+            if (desiredRotationAngle > 10 || desiredRotationAngle < -10)
             {
                 Quaternion deltaRotation = Quaternion.Euler(Vector3.up * desiredRotationAngle * turnSpeed * Time.deltaTime);
                 rb.MoveRotation(rb.rotation * deltaRotation);
 
                 //transform.Rotate(Vector3.up * desiredRotationAngle * turnSpeed * Time.deltaTime);
             }
+
+            //float turnSpeed = Mathf.Lerp(m_StationaryTurnSpeed, m_MovingTurnSpeed, m_ForwardAmount);
+           // transform.Rotate(0, m_TurnAmount * turnSpeed * Time.deltaTime, 0);
+
+
+            //Quaternion delta = Quaternion.Euler(Vector3.up * desiredRotationAngle * turnSpeed * Time.deltaTime);
+            //rb.MoveRotation(rb.rotation * delta);
         }
 
         private void HandleAnimations()
